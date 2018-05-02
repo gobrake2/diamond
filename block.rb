@@ -1,10 +1,19 @@
 # pure ruby
 
+require 'securerandom'
+
 class Blockchain
 	
 	def initialize
 		@chain = []
 		@trans = []
+		@wallet = {}
+	end
+
+	def make_a_new_wallet
+		address = SecureRandom.uuid.gsub("-","")
+		@wallet[address] = 1000
+		@wallet
 	end
 
 	def make_a_trans(s, r, a)
