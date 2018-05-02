@@ -4,8 +4,17 @@ class Blockchain
 	
 	def initialize
 		@chain = []
+		@trans = []
+	end
 
-		
+	def make_a_trans(s, r, a)
+		trans = {
+			"sender" => s,
+			"receiver" => r,
+			"amount" => a
+		}
+		@trans << trans
+		@trans
 	end
 
 	def mining
@@ -23,9 +32,10 @@ class Blockchain
 			"index" => @chain.size + 1,
 			"time" => Time.now,
 			"nonce" => nonce,
-			"previous_address" => Digest::SHA256.hexdigest(last_block.to_s)
+			"previous_address" => Digest::SHA256.hexdigest(last_block.to_s),
+			"transactions" => @trans
 		}
-
+		@trans = []
 		@chain << block
 		block
 
