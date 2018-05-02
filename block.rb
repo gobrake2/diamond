@@ -10,20 +10,34 @@ class Blockchain
 		@wallet = {}
 	end
 
-	def make_a_new_wallet
-		address = SecureRandom.uuid.gsub("-","")
-		@wallet[address] = 1000
+	def show_all_wallet
 		@wallet
 	end
 
+	def make_a_new_wallet
+		address = SecureRandom.uuid.gsub("-","")
+		@wallet[address] = 1000
+	end
+
 	def make_a_trans(s, r, a)
-		trans = {
-			"sender" => s,
-			"receiver" => r,
-			"amount" => a
-		}
-		@trans << trans
-		@trans
+		if @wallet[s].nil?
+			"Wrong Address XXXXXXXXXXXXXXXXXXXXXXXXXXX"
+		elsif @wallet[r].nil?
+			"Right Address OOOOOOOOOOOOOOOOOOOOOOOOOOO"
+		elsif @wallet[s].to_f < a.to_f
+			"No Coin !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+		else
+			@wallet[s] = @wallet[s].to_f - a.to_f
+			@wallet[r] = @wallet[r].to_f - a.to_f
+
+			trans = {
+				"sender" => s,
+				"receiver" => r,
+				"amount" => a
+			}
+			@trans << trans
+			@trans
+		end
 	end
 
 	def mining

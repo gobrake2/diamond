@@ -37,3 +37,7 @@ get '/new_wallet' do
 
 end
 
+get '/all_wallet' do
+	blockchain.show_all_wallet.to_s
+
+end
