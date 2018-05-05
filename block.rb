@@ -1,6 +1,7 @@
 # pure ruby
 
 require 'securerandom'
+require 'httparty'
 
 class Blockchain
 	
@@ -8,6 +9,7 @@ class Blockchain
 		@chain = []
 		@trans = []
 		@wallet = {}
+		@node = []
 	end
 
 	def show_all_wallet
@@ -28,7 +30,7 @@ class Blockchain
 			"No Coin !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 		else
 			@wallet[s] = @wallet[s].to_f - a.to_f
-			@wallet[r] = @wallet[r].to_f - a.to_f
+			@wallet[r] = @wallet[r].to_f + a.to_f
 
 			trans = {
 				"sender" => s,
@@ -72,7 +74,32 @@ class Blockchain
 		@chain[-1]
 	end
 
+	def ask_other_block
+		
+		@node.each do |n|
+			other_block = HTTParty.get("http://localhost:" + n + "/number_of_blocks").body
 
+			if @chain.size < other_block.to_i
+				jsoned_chain = @chain.to_json
+				full_chain = HTTParty.get("http://localhost:" + n + "/recv?blocks=" + jsoned_chain)
+				@chain = JSON.parse(full_chain)
+			end
+		
+		end
+	end
+
+	def add_node(node)
+		@node << node
+		@node.uniq!
+		@node
+	end
+
+	def recv(blocks)
+		blocks.each do |b|
+			@chain << b
+		end
+		@chain
+	end
 
 end
 

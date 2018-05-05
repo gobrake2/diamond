@@ -41,3 +41,21 @@ get '/all_wallet' do
 	blockchain.show_all_wallet.to_s
 
 end
+
+get '/number_of_blocks' do
+	blockchain.all_blocks.size.to_s
+end
+
+get '/ask' do
+	blockchain.ask_other_block
+end
+
+get '/add_node' do
+	blockchain.add_node(params[:node])
+end
+
+get '/recv' do
+	recv_block = JSON.parse(params["blocks"])
+	blockchain.recv(recv_block)
+	blockchain.all_blocks.to_json
+end
